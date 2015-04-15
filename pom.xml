@@ -7,24 +7,26 @@
     <groupId>edu.cmu.lti.oaqa.lapps</groupId>
     <artifactId>gigaword-lucene</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <lucene.version>4.10.3</lucene.version>
+        <solr.version>5.0.0</solr.version>
     </properties>
 
-    <build>
-        <plugins>
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.0</version>
-                <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+    <repositories>
+        <repository>
+            <id>anc-releases</id>
+            <url>http://www.anc.org:8080/nexus/content/repositories/releases/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 
     <dependencies>
 
@@ -43,8 +45,54 @@
             <artifactId>lucene-queryparser</artifactId>
             <version>${lucene.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.solr</groupId>
+            <artifactId>solr-solrj</artifactId>
+            <version>${solr.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.lappsgrid</groupId>
+            <artifactId>all</artifactId>
+            <version>2.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.lappsgrid</groupId>
+            <artifactId>service-grid-libs</artifactId>
+            <version>1.1.0</version>
+        </dependency>
 
     </dependencies>
 
+
+    <build>
+        <finalName>GigawordServices#${project.version}</finalName>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.0</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>9.2.10.v20150310</version>
+                <configuration>
+                    <jvmArgs>-Xms512m -Xmx1024m -XX:MaxPermSize=256m</jvmArgs>
+                    <httpConnector>
+                        <port>4040</port>
+                    </httpConnector>
+                    <stopKey/>
+                    <stopPort/>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
 
 </project>
