@@ -4,6 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>org.lappsgrid.maven</groupId>
+        <artifactId>war-parent-pom</artifactId>
+        <version>2.0.5</version>
+    </parent>
+
     <groupId>edu.cmu.lti.oaqa.lapps</groupId>
     <artifactId>gigaword-lucene</artifactId>
     <version>1.0-SNAPSHOT</version>
@@ -13,20 +19,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <lucene.version>4.10.3</lucene.version>
         <solr.version>5.0.0</solr.version>
+        <jettyVersion>9.0.2.v20130417</jettyVersion>
     </properties>
-
-    <repositories>
-        <repository>
-            <id>anc-releases</id>
-            <url>http://www.anc.org:8080/nexus/content/repositories/releases/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
 
     <dependencies>
 
@@ -53,17 +47,12 @@
 
         <dependency>
             <groupId>org.lappsgrid</groupId>
-            <artifactId>all</artifactId>
-            <version>2.0.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.lappsgrid</groupId>
-            <artifactId>service-grid-libs</artifactId>
-            <version>1.1.0</version>
+            <artifactId>core</artifactId>
+            <version>2.0.2</version>
         </dependency>
 
     </dependencies>
+
 
 
     <build>
@@ -79,16 +68,17 @@
             </plugin>
 
             <plugin>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-maven-plugin</artifactId>
-                <version>9.2.10.v20150310</version>
+                <groupId>org.mortbay.jetty</groupId>
+                <artifactId>maven-jetty-plugin</artifactId>
                 <configuration>
-                    <jvmArgs>-Xms512m -Xmx1024m -XX:MaxPermSize=256m</jvmArgs>
-                    <httpConnector>
-                        <port>4040</port>
-                    </httpConnector>
-                    <stopKey/>
-                    <stopPort/>
+                    <scanIntervalSeconds>30</scanIntervalSeconds>
+                    <connectors>
+                        <connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
+                            <port>4040</port>
+                            <maxIdleTime>60000</maxIdleTime>
+                        </connector>
+                    </connectors>
+                    <contextPath>/</contextPath>
                 </configuration>
             </plugin>
 
